@@ -6,7 +6,6 @@ class Slide extends HTMLElement {
 	constructor(image) {
 		super();
 		this.image = image;
-		console.log(this.image);
 	}
 
 	/*

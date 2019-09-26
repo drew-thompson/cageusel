@@ -29,6 +29,12 @@ class Cageusel extends HTMLElement {
 		const instance = template.content.cloneNode(true);
 		shadowRoot.appendChild(instance);
 
+		const next = this.shadowRoot.querySelector('#next');
+		next.addEventListener('click', () => this.next());
+
+		const prev = this.shadowRoot.querySelector('#prev');
+		prev.addEventListener('click', () => this.prev());
+
 		this.render();
 	}
 
@@ -37,11 +43,48 @@ class Cageusel extends HTMLElement {
 		// All of our components elements reside under shadow dom. So we created a this.shadowRoot property
 		// We use this property to call selectors so that the DOM is searched only under this subtree
 		const ul = this.shadowRoot.querySelector('ul');
-		for (const img of this.images) {
+		for (let i = 0; i < this.images.length; i++) {
+			const img = this.images[i];
+			const li = currentDocument.createElement('li');
 			const slide = new Slide(img);
 
-			ul.appendChild(slide);
+			li.appendChild(slide);
+			if (i) {
+				li.style = 'display: none';
+			}
+
+			ul.appendChild(li);
 		}
+	}
+
+	next() {
+		const len = this.images.length;
+		const isWrappingRight = this.index === len - 1;
+		if (!isWrappingRight) {
+			this.index++;
+		} else {
+			this.index = 0;
+		}
+		this.updateVisibleSlide();
+	}
+
+	prev() {
+		const len = this.images.length;
+		const isWrappingLeft = !this.index;
+		if (!isWrappingLeft) {
+			this.index--;
+		} else {
+			this.index = len - 1;
+		}
+		this.updateVisibleSlide();
+	}
+
+	updateVisibleSlide() {
+		console.log(this.index);
+	}
+
+	attributeChangedCallback(name, oldValue, newValue) {
+		console.log(name, oldValue, newValue);
 	}
 }
 
