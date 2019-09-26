@@ -50,7 +50,7 @@ class Cageusel extends HTMLElement {
 
 			li.appendChild(slide);
 			if (i) {
-				li.style = 'display: none';
+				this.hide(li);
 			}
 
 			ul.appendChild(li);
@@ -58,6 +58,7 @@ class Cageusel extends HTMLElement {
 	}
 
 	next() {
+		const current = this.index;
 		const len = this.images.length;
 		const isWrappingRight = this.index === len - 1;
 		if (!isWrappingRight) {
@@ -65,10 +66,11 @@ class Cageusel extends HTMLElement {
 		} else {
 			this.index = 0;
 		}
-		this.updateVisibleSlide();
+		this.swapSlidesAtIndices(current, this.index);
 	}
 
 	prev() {
+		const current = this.index;
 		const len = this.images.length;
 		const isWrappingLeft = !this.index;
 		if (!isWrappingLeft) {
@@ -76,15 +78,32 @@ class Cageusel extends HTMLElement {
 		} else {
 			this.index = len - 1;
 		}
-		this.updateVisibleSlide();
+		this.swapSlidesAtIndices(current, this.index);
 	}
 
-	updateVisibleSlide() {
-		console.log(this.index);
+	swapSlidesAtIndices(prev, next) {
+		const items = this.getItems();
+		const prevLi = this.getItem(prev, items);
+		const nextLi = this.getItem(next, items);
+
+		this.hide(prevLi);
+		this.show(nextLi);
 	}
 
-	attributeChangedCallback(name, oldValue, newValue) {
-		console.log(name, oldValue, newValue);
+	hide(item) {
+		item.style.display = 'none';
+	}
+
+	show(item) {
+		item.style.display = 'initial';
+	}
+
+	getItems() {
+		return this.shadowRoot.querySelectorAll('ul li');
+	}
+
+	getItem(index, items = this.getItems()) {
+		return items[index];
 	}
 }
 
