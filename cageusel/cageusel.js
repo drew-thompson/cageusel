@@ -85,6 +85,17 @@ class Cageusel extends HTMLElement {
 		this.swapSlidesAtIndices(current, this.index);
 	}
 
+	onNavigated(forward) {
+		if (forward) {
+			this.next();
+		} else {
+			this.prev();
+		}
+		if (this.isPlaying) {
+			this.pause();
+		}
+	}
+
 	swapSlidesAtIndices(prev, next) {
 		const items = this.getItems();
 		const prevLi = this.getItem(prev, items);
@@ -92,6 +103,13 @@ class Cageusel extends HTMLElement {
 
 		this.hide(prevLi);
 		this.show(nextLi);
+	}
+
+	swapActionButton() {
+		const hide = this.isPlaying ? this.playButton : this.pauseButton;
+		const show = this.isPlaying ? this.pauseButton : this.playButton;
+		this.hide(hide);
+		this.show(show);
 	}
 
 	hide(item) {
@@ -116,6 +134,7 @@ class Cageusel extends HTMLElement {
 				this.next();
 			}, this.period || 5000);
 			this.isPlaying = true;
+			this.swapActionButton();
 		}
 	}
 
@@ -125,21 +144,30 @@ class Cageusel extends HTMLElement {
 				clearInterval(this.intervalId);
 			}
 			this.isPlaying = false;
+			this.swapActionButton();
 		}
 	}
 
 	assignActionListeners() {
 		const next = this.shadowRoot.querySelector('#next');
-		next.addEventListener('click', () => this.next());
+		next.addEventListener('click', () => this.onNavigated(true));
 
 		const prev = this.shadowRoot.querySelector('#prev');
-		prev.addEventListener('click', () => this.prev());
+		prev.addEventListener('click', () => this.onNavigated(false));
 
 		const play = this.shadowRoot.querySelector('#play');
 		play.addEventListener('click', () => this.play());
 
 		const pause = this.shadowRoot.querySelector('#pause');
 		pause.addEventListener('click', () => this.pause());
+	}
+
+	get pauseButton() {
+		return this.shadowRoot.querySelector('#pause');
+	}
+
+	get playButton() {
+		return this.shadowRoot.querySelector('#play');
 	}
 
 	get autoplay() {
