@@ -4,6 +4,8 @@ class Cageusel extends HTMLElement {
 	cages = ['', 'g', 'c', 'gif', 'g'].sort(() => Math.random() - 0.5);
 	images = [];
 	index = 0;
+	intervalId;
+	isPlaying;
 
 	constructor() {
 		super();
@@ -29,19 +31,21 @@ class Cageusel extends HTMLElement {
 		const instance = template.content.cloneNode(true);
 		shadowRoot.appendChild(instance);
 
-		const next = this.shadowRoot.querySelector('#next');
-		next.addEventListener('click', () => this.next());
+		this.assignActionListeners();
 
-		const prev = this.shadowRoot.querySelector('#prev');
-		prev.addEventListener('click', () => this.prev());
+		if (this.autoplay) {
+			this.play();
+		}
 
 		this.render();
 	}
 
+	/**
+	 * Fill the respective areas of the cageusel using DOM manipulation APIs.
+	 * All of our components elements reside under shadow dom. So we created a this.shadowRoot property.
+	 * We use this property to call selectors so that the DOM is searched only under this subtree.
+	 */
 	render() {
-		// Fill the respective areas of the card using DOM manipulation APIs
-		// All of our components elements reside under shadow dom. So we created a this.shadowRoot property
-		// We use this property to call selectors so that the DOM is searched only under this subtree
 		const ul = this.shadowRoot.querySelector('ul');
 		for (let i = 0; i < this.images.length; i++) {
 			const img = this.images[i];
@@ -104,6 +108,48 @@ class Cageusel extends HTMLElement {
 
 	getItem(index, items = this.getItems()) {
 		return items[index];
+	}
+
+	play() {
+		if (!this.isPlaying) {
+			this.intervalId = setInterval(() => {
+				this.next();
+			}, this.period || 5000);
+			this.isPlaying = true;
+		}
+	}
+
+	pause() {
+		if (this.isPlaying) {
+			if (this.intervalId !== null) {
+				clearInterval(this.intervalId);
+			}
+			this.isPlaying = false;
+		}
+	}
+
+	assignActionListeners() {
+		const next = this.shadowRoot.querySelector('#next');
+		next.addEventListener('click', () => this.next());
+
+		const prev = this.shadowRoot.querySelector('#prev');
+		prev.addEventListener('click', () => this.prev());
+
+		const play = this.shadowRoot.querySelector('#play');
+		play.addEventListener('click', () => this.play());
+
+		const pause = this.shadowRoot.querySelector('#pause');
+		pause.addEventListener('click', () => this.pause());
+	}
+
+	get autoplay() {
+		const autoplay = this.getAttribute('autoplay');
+		return autoplay !== null && autoplay !== 'false';
+	}
+
+	get period() {
+		const period = this.getAttribute('period');
+		return parseInt(period, 10);
 	}
 }
 
