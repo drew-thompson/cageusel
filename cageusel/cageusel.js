@@ -3,7 +3,16 @@ const currentDocument = document.currentScript.ownerDocument;
 class Cageusel extends HTMLElement {
 	cages = ['', 'g', 'c', 'gif', 'g'].sort(() => Math.random() - 0.5);
 	images = [];
-	index = 0;
+
+	_index = 0;
+	set index(index) {
+		this._index = index;
+		this.dots.setAttribute('index', index);
+	}
+	get index() {
+		return this._index;
+	}
+
 	intervalId;
 	isPlaying;
 
@@ -17,12 +26,7 @@ class Cageusel extends HTMLElement {
 				alt: 'Nicky Cage'
 			};
 		});
-	}
 
-	/*
-	 * Called when element is inserted in DOM
-	 */
-	connectedCallback() {
 		const shadowRoot = this.attachShadow({ mode: 'open' });
 
 		// Select the template and clone it. Finally attach the cloned node to the shadowDOM's root.
@@ -30,7 +34,12 @@ class Cageusel extends HTMLElement {
 		const template = currentDocument.querySelector('#cageusel-template');
 		const instance = template.content.cloneNode(true);
 		shadowRoot.appendChild(instance);
+	}
 
+	/*
+	 * Called when element is inserted in DOM
+	 */
+	connectedCallback() {
 		this.assignActionListeners();
 
 		if (this.autoplay) {
@@ -61,6 +70,12 @@ class Cageusel extends HTMLElement {
 
 			ul.appendChild(li);
 		}
+		const dots = new IndicatorDots(this.images.length);
+		document.addEventListener('selected', e => {
+			const index = e.detail.index;
+			this.select(index);
+		});
+		this.imageWrapper.appendChild(dots);
 	}
 
 	next() {
@@ -85,6 +100,15 @@ class Cageusel extends HTMLElement {
 			this.index = len - 1;
 		}
 		this.swapSlidesAtIndices(current, this.index);
+	}
+
+	select(index) {
+		const current = this.index;
+		this.index = index;
+		this.swapSlidesAtIndices(current, this.index);
+		if (this.isPlaying) {
+			this.pause();
+		}
 	}
 
 	onNavigated(forward) {
@@ -158,6 +182,10 @@ class Cageusel extends HTMLElement {
 		this.pauseButton.addEventListener('click', () => this.pause());
 	}
 
+	getEl(selector) {
+		return this.shadowRoot.querySelector(selector);
+	}
+
 	get pauseButton() {
 		return this.getEl('#pause');
 	}
@@ -174,8 +202,8 @@ class Cageusel extends HTMLElement {
 		return this.getEl('#prev');
 	}
 
-	getEl(selector) {
-		return this.shadowRoot.querySelector(selector);
+	get dots() {
+		return this.getEl('indicator-dots');
 	}
 
 	get autoplay() {
@@ -186,6 +214,10 @@ class Cageusel extends HTMLElement {
 	get period() {
 		const period = this.getAttribute('period');
 		return parseInt(period, 10);
+	}
+
+	get imageWrapper() {
+		return this.getEl('#image-wrapper');
 	}
 }
 

@@ -1,0 +1,19 @@
+ol {
+	list-style: none;
+}
+
+li {
+	display: inline-block;
+}
+
+:host {
+	width: 100%;
+	text-align: center;
+	z-index: 100;
+	position: absolute;
+	bottom: 0;
+}
+
+div {
+	padding: 0.25rem;
+}
