@@ -1,6 +1,6 @@
 const cageslideDoc = document.currentScript.ownerDocument;
 
-class Slide extends HTMLElement {
+class CageSlide extends HTMLElement {
 	image;
 
 	constructor(image) {
@@ -30,4 +30,4 @@ class Slide extends HTMLElement {
 	}
 }
 
-customElements.define('cage-slide', Slide);
+customElements.define('cage-slide', CageSlide);

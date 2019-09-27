@@ -1,6 +1,26 @@
 h1,
 h2,
 h3 {
-	/* font-family: 'Lato', sans-serif; */
 	font-family: 'Roboto', sans-serif;
+	text-align: center;
+}
+
+a {
+	font-family: 'Lato', sans-serif;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+header {
+	text-align: center;
+}
+
+img {
+	width: 100%;
+	display: block;
+	margin: auto;
+	max-width: 500px;
 }

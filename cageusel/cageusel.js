@@ -35,6 +35,8 @@ class Cageusel extends HTMLElement {
 
 		if (this.autoplay) {
 			this.play();
+		} else {
+			this.swapActionButton();
 		}
 
 		this.render();
@@ -46,11 +48,11 @@ class Cageusel extends HTMLElement {
 	 * We use this property to call selectors so that the DOM is searched only under this subtree.
 	 */
 	render() {
-		const ul = this.shadowRoot.querySelector('ul');
+		const ul = this.getEl('ul');
 		for (let i = 0; i < this.images.length; i++) {
 			const img = this.images[i];
 			const li = currentDocument.createElement('li');
-			const slide = new Slide(img);
+			const slide = new CageSlide(img);
 
 			li.appendChild(slide);
 			if (i) {
@@ -149,25 +151,31 @@ class Cageusel extends HTMLElement {
 	}
 
 	assignActionListeners() {
-		const next = this.shadowRoot.querySelector('#next');
-		next.addEventListener('click', () => this.onNavigated(true));
+		this.nextButton.addEventListener('click', () => this.onNavigated(true));
+		this.prevButton.addEventListener('click', () => this.onNavigated(false));
 
-		const prev = this.shadowRoot.querySelector('#prev');
-		prev.addEventListener('click', () => this.onNavigated(false));
-
-		const play = this.shadowRoot.querySelector('#play');
-		play.addEventListener('click', () => this.play());
-
-		const pause = this.shadowRoot.querySelector('#pause');
-		pause.addEventListener('click', () => this.pause());
+		this.playButton.addEventListener('click', () => this.play());
+		this.pauseButton.addEventListener('click', () => this.pause());
 	}
 
 	get pauseButton() {
-		return this.shadowRoot.querySelector('#pause');
+		return this.getEl('#pause');
 	}
 
 	get playButton() {
-		return this.shadowRoot.querySelector('#play');
+		return this.getEl('#play');
+	}
+
+	get nextButton() {
+		return this.getEl('#next');
+	}
+
+	get prevButton() {
+		return this.getEl('#prev');
+	}
+
+	getEl(selector) {
+		return this.shadowRoot.querySelector(selector);
 	}
 
 	get autoplay() {

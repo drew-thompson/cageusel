@@ -2,12 +2,19 @@
 
 <template id="cageusel-template">
     <link rel="stylesheet" href="/cageusel/cageusel.css">
-    <ul></ul>
-    <div>
-        <button id="prev">Prev</button>
-        <button id="next">Next</button>
-        <button id="play">Play</button>
-        <button id="pause">Pause</button>
-    </div>
+    <section>
+
+        <div id="arrow-wrapper">
+            <ul id="image-wrapper"></ul>
+
+            <button id="prev">‹</button>
+            <button id="next">›</button>
+        </div>
+
+        <div id="toolbar">
+            <button id="play">&#9654;</button>
+            <button id="pause">&#9208;</button>
+        </div>
+    </section>
 </template>
 <script src="cageusel.js"></script>
