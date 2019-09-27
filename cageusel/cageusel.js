@@ -158,7 +158,7 @@ class Cageusel extends HTMLElement {
 		if (!this.isPlaying) {
 			this.intervalId = setInterval(() => {
 				this.next();
-			}, this.period || 5000);
+			}, this.period || 3000);
 			this.isPlaying = true;
 			this.swapActionButton();
 		}

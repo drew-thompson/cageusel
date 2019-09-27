@@ -37,10 +37,16 @@ class IndicatorDots extends HTMLElement {
 		const ol = this.dotsOl;
 		for (let index = 0; index < this.dots.length; index++) {
 			const li = indicatorDotsDoc.createElement('li');
+			const button = indicatorDotsDoc.createElement('button');
+			button.type = 'button';
+
+			button.tabIndex = index + 1;
+			li.appendChild(button);
+
 			if (!index) {
-				this.select(li);
+				this.select(button);
 			} else {
-				this.deselect(li);
+				this.deselect(button);
 			}
 			li.addEventListener('click', () => document.dispatchEvent(new CustomEvent('selected', { detail: { index } })));
 			ol.appendChild(li);
@@ -69,7 +75,7 @@ class IndicatorDots extends HTMLElement {
 	}
 
 	get indicators() {
-		return this.shadowRoot.querySelectorAll('li');
+		return this.shadowRoot.querySelectorAll('li button');
 	}
 
 	get index() {
