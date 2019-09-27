@@ -171,7 +171,10 @@ class Cageusel extends HTMLElement {
 		return this.shadowRoot.querySelectorAll('ul li');
 	}
 
-	getItem(index, items = this.getItems()) {
+	getItem(index, items) {
+		if (!items) {
+			items = this.getItems();
+		}
 		return items[index];
 	}
 
