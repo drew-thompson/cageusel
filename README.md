@@ -22,7 +22,7 @@ All feature requirements [listed above](#Requirements) have been delivered. The 
 
 ### Sister App
 
-Though this implementation is interesting, the angular application is obviously much more flexible, dynamic, and overall better. How do we get there? Click [here](https://github.com/drew-thompson/ngx-carousel). To view the app, click [here](https://drew-thompson.github.io/ngx-carousel).
+Though this implementation is interesting, the Angular application is obviously much more flexible, dynamic, and overall better. How do we get there? Click [here](https://github.com/drew-thompson/ngx-carousel). To view the app, click [here](https://drew-thompson.github.io/ngx-carousel).
 
 ### Gotchas
 
