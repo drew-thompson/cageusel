@@ -1,4 +1,25 @@
-const currentDocument = document.currentScript.ownerDocument;
+import { CageSlide } from './cageslide.js';
+import { IndicatorDots } from './indicator-dots.js';
+
+const template = document.createElement('template');
+
+template.id = 'cageusel-template';
+template.innerHTML = `
+<link rel="stylesheet" href="resources/css/cageusel.css">
+<section>
+
+	<div id="arrow-wrapper">
+		<ul id="image-wrapper"></ul>
+
+		<button id="prev">‹</button>
+		<button id="next">›</button>
+	</div>
+
+	<div id="toolbar">
+		<button id="play">&#9654;</button>
+		<button id="pause">&#9208;</button>
+	</div>
+</section>`;
 
 class Cageusel extends HTMLElement {
 	cages = ['', 'g', 'c', 'gif', 'g'].sort(() => Math.random() - 0.5);
@@ -31,7 +52,7 @@ class Cageusel extends HTMLElement {
 
 		// Select the template and clone it. Finally attach the cloned node to the shadowDOM's root.
 		// Current document needs to be defined to get DOM access to imported HTML
-		const template = currentDocument.querySelector('#cageusel-template');
+		// const template = document.querySelector('#cageusel-template');
 		const instance = template.content.cloneNode(true);
 		shadowRoot.appendChild(instance);
 	}
@@ -60,7 +81,7 @@ class Cageusel extends HTMLElement {
 		const ul = this.getEl('ul');
 		for (let i = 0; i < this.images.length; i++) {
 			const img = this.images[i];
-			const li = currentDocument.createElement('li');
+			const li = document.createElement('li');
 			const slide = new CageSlide(img);
 
 			li.appendChild(slide);

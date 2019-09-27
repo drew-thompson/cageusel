@@ -1,6 +1,13 @@
-const indicatorDotsDoc = document.currentScript.ownerDocument;
+const indicatorDotsDoc = document;
+const template = document.createElement('template');
 
-class IndicatorDots extends HTMLElement {
+template.id = 'indicator-dots-template';
+template.innerHTML = `<link rel="stylesheet" href="resources/css/indicator-dots.css">
+<div>
+	<ol></ol>
+</div>`;
+
+export class IndicatorDots extends HTMLElement {
 	static get observedAttributes() {
 		return ['index'];
 	}
@@ -20,7 +27,6 @@ class IndicatorDots extends HTMLElement {
 
 		// Select the template and clone it. Finally attach the cloned node to the shadowDOM's root.
 		// Current document needs to be defined to get DOM access to imported HTML
-		const template = indicatorDotsDoc.querySelector('#indicator-dots-template');
 		const instance = template.content.cloneNode(true);
 		shadowRoot.appendChild(instance);
 
